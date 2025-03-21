@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bristol Car Parks</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+</head>
+<body>
+  <header>
+    <h1>Bristol Car Parks Information</h1>
+  </header>
+
+  <main>
+    <input type="text" id="search" placeholder="Search by name..." />
+    
+    <div id="map"></div>
+
+    <div id="loading">Loading data...</div>
+    
+    <table id="carpark-table">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Levels</th>
+          <th>Operator</th>
+          <th>Spaces</th>
+          <th>Operating Times</th>
+          <th>Facility Type</th>
+          <th>CCTV</th>
+          <th>Occupancy</th>
+          <th>Trend</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+  </main>
+
+  <footer>
+    <p>&copy; 2025 Bristol Car Parks</p>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

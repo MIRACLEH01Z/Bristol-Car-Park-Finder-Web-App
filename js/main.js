@@ -1,21 +1,23 @@
-const apiURL = "https://maps2.bristol.gov.uk/server2/rest/services/ext/ll_transport/MapServer/5/query?where=1%3D1&outFields=NAME,NUMBER_LEVELS,OPERATOR,SPACES,OPERATING_TIMES,FACILITY_TYPE,CCTV,OCCUPANCY,TREND&outSR=4326&f=json";
+const api_url = "https://maps2.bristol.gov.uk/server2/rest/services/ext/ll_transport/MapServer/5/query?where=1%3D1&outFields=NAME,NUMBER_LEVELS,OPERATOR,SPACES,OPERATING_TIMES,FACILITY_TYPE,CCTV,OCCUPANCY,TREND&outSR=4326&f=json";
 
+// Initializing map centered to Bristol
 const map = L.map('map').setView([51.4545, -2.5879], 13);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  maxZoom: 18,
+  max_zoom: 18,
   attribution: '&copy; OpenStreetMap contributors'
 }).addTo(map);
 
-let carparkData = [];
+let carpark_data = [];
 let markers = [];
 
-async function fetchData() {
+// fetching car data from the API
+async function getCarParksFromAPI() {
   try {
-    const response = await fetch(apiURL);
+    const response = await fetch(api_url);
     const data = await response.json();
-    carparkData = data.features;
-    buildTable(carparkData);
-    plotMap(carparkData);
+    carpark_data = data.features;
+    build_table(carpark_data);
+    plotCarParks_OnMap(carpark_data);
     document.getElementById('loading').style.display = "none";
   } catch (error) {
     document.getElementById('loading').innerText = "Error loading data!";
@@ -23,10 +25,10 @@ async function fetchData() {
   }
 }
 
-// Build table
-function buildTable(carparks) {
-  const tableBody = document.querySelector('#carpark-table tbody');
-  tableBody.innerHTML = "";
+// adding car park information to a table
+function build_table(carparks) {
+  const table_body = document.querySelector('#carpark-table tbody');
+  table_body.innerHTML = "";
 
   carparks.forEach(item => {
     const attributes = item.attributes;
@@ -44,12 +46,13 @@ function buildTable(carparks) {
       <td>${attributes.TREND || 'N/A'}</td>
     `;
     row.dataset.name = attributes.NAME.toLowerCase(); // Store name in data attribute
-    tableBody.appendChild(row);
+    table_body.appendChild(row);
   });
 }
 
 // Plotting markers and store them
-function plotMap(carparks) {
+function plotCarParks_OnMap(carparks) {
+  // clearing previous markers
   markers.forEach(marker => map.removeLayer(marker));
   markers = [];
 
@@ -67,21 +70,21 @@ function plotMap(carparks) {
     }
   });
 
-  // Fitting map to all markers initially
+  // Adjust map view fit all markers
   if (markers.length > 0) {
     const group = L.featureGroup(markers);
     map.fitBounds(group.getBounds());
   }
 }
 
-// Search Functionality
+// Filter car parks based on user input
 document.getElementById('search').addEventListener('input', function(e) {
-  const searchTerm = e.target.value.toLowerCase();
+  const search_term = e.target.value.toLowerCase();
 
   // Filtering table rows
   const rows = document.querySelectorAll('#carpark-table tbody tr');
   rows.forEach(row => {
-    if (row.dataset.name.includes(searchTerm)) {
+    if (row.dataset.name.includes(search_term)) {
       row.style.display = '';
     } else {
       row.style.display = 'none';
@@ -89,15 +92,15 @@ document.getElementById('search').addEventListener('input', function(e) {
   });
 
  
-  let filteredMarkers = markers.filter(marker => marker.name.includes(searchTerm));
+  let filtered_markers = markers.filter(marker => marker.name.includes(search_term));
   markers.forEach(marker => map.removeLayer(marker));
-  filteredMarkers.forEach(marker => marker.addTo(map));
+  filtered_markers.forEach(marker => marker.addTo(map));
 
-  // Zoom in if results found
-  if (filteredMarkers.length > 0) {
-    const group = L.featureGroup(filteredMarkers);
+  // Zoom in when results are found
+  if (filtered_markers.length > 0) {
+    const group = L.featureGroup(filtered_markers);
     map.fitBounds(group.getBounds());
   }
 });
 
-window.onload = fetchData;
+window.onload = getCarParksFromAPI;

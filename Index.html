@@ -13,11 +13,11 @@
   </header>
 
   <main>
-    <input type="text" id="search" placeholder="Search by name..." />
-    
+    <input type="text" id="search" placeholder="Search for a car park..." />
+
     <div id="map"></div>
 
-    <div id="loading">Loading data...</div>
+    <div id="loading">Fetching live data...</div>
     
     <table id="carpark-table">
       <thead>
@@ -26,10 +26,10 @@
           <th>Levels</th>
           <th>Operator</th>
           <th>Spaces</th>
-          <th>Operating Times</th>
-          <th>Facility Type</th>
+          <th>Operating Hours</th>
+          <th>Facilities</th>
           <th>CCTV</th>
-          <th>Occupancy</th>
+          <th>Current Occupancy</th>
           <th>Trend</th>
         </tr>
       </thead>
@@ -38,7 +38,7 @@
   </main>
 
   <footer>
-    <p>&copy; 2025 Bristol Car Parks</p>
+    <p>&copy; 2025 Bristol Car Parks - Keeping You Moving</p>
   </footer>
 
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
